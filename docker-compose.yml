@@ -12,6 +12,7 @@ services:
       - MAILUSER:$MAILUSER
       - MAILPASSWORD:$MAILPASSWORD
       - DATAFOLDER:$DATAFOLDER
-
+    restart: always
+    
 volumes: 
   botdata:
