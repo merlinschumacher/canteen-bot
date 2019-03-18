@@ -1,0 +1,17 @@
+version: "3.7"
+
+services:
+  bot:
+    build: .
+    volumes:
+      - botdata:/bot
+    env_file: .env
+    environment:
+      - BOTTOKEN:$BOTTOKEN
+      - MAILSERVER:$MAILSERVER
+      - MAILUSER:$MAILUSER
+      - MAILPASSWORD:$MAILPASSWORD
+      - DATAFOLDER:$DATAFOLDER
+
+volumes: 
+  botdata:
