@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   bot:
-    build: .
+    image: merlinschumacher/canteen-bot:latest
     volumes:
       - botdata:/bot
     env_file: .env
