@@ -149,7 +149,7 @@ def getCurrentFood():
     targetfolder += "mensa/"
     week = str("%02d" % datetime.date.today().isocalendar()[1])
     year = str(datetime.datetime.now().year)
-    hour = datetime.datetime.now.hour
+    hour = datetime.datetime.now().hour
     dow = datetime.datetime.today().weekday()
     if hour >= 14:
         dow += 1
