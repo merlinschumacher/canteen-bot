@@ -10,11 +10,13 @@ import ocr_mensa
 def setup_schedule():
     mensadir = os.environ.get('MENSAFOLDER', './data/mensa/')
     dussmanndir = os.environ.get('DUSSMANNFOLDER', './data/dussmann/')
-    schedule.every().day.at("10:30").do(get_mensa.getMensa)
-    schedule.every().day.at("10:30").do(get_dussmann.getDussmann)
-    schedule.every().day.at("10:45").do(
+    
+    schedule.every().day.at("09:30").do(get_mensa.getMensa)
+    schedule.every().day.at("09:30").do(get_dussmann.getDussmann)
+    
+    schedule.every().day.at("09:45").do(
         ocr_dussmann.saveMenuToFile, dussmanndir)
-    schedule.every().day.at("10:45").do(
+    schedule.every().day.at("09:45").do(
         ocr_mensa.saveMenuToFile, mensadir)
 
 def run_schedule():
