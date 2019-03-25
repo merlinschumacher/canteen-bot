@@ -14,9 +14,9 @@ def setup_schedule():
     schedule.every().day.at("09:30").do(get_mensa.getMensa)
     schedule.every().day.at("09:30").do(get_dussmann.getDussmann)
     
-    schedule.every().day.at("09:45").do(
+    schedule.every().day.at("09:32").do(
         ocr_dussmann.saveMenuToFile, dussmanndir)
-    schedule.every().day.at("09:45").do(
+    schedule.every().day.at("09:32").do(
         ocr_mensa.saveMenuToFile, mensadir)
 
 def run_schedule():
