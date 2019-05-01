@@ -157,6 +157,7 @@ def saveMenuToFile(targetfolder):
     year = str(datetime.datetime.now().year)
     global pdf
     pdf = targetfolder + year + week + ".pdf"
+    print("Converting Dussmann to text")
     for dow in range(0, 5):
         filename = targetfolder + year + week + str(dow) + ".txt"
         m = menu(dow)
