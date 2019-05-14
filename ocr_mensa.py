@@ -10,6 +10,7 @@ from pdf2image import convert_from_path
 import numpy
 import time
 import os 
+from helpers import with_logging
 
 #price_re = re.compile("(\d+,\d+\s*€)")
 linebreak_re = re.compile("\n+")
@@ -132,6 +133,7 @@ def crop(image, box):
         cropped_h = int(box[3]*h)
         return image.crop((x, y, x + cropped_w, y + cropped_h))
 
+# @with_logging
 def saveMenuToFile(targetfolder):
     week = str("%02d" % datetime.date.today().isocalendar()[1])
     year = str(datetime.datetime.now().year)

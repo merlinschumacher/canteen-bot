@@ -8,16 +8,16 @@ import datetime
 import random
 import pickle
 import logging
+import helpers
 import ocr_dussmann
 import ocr_mensa
-from threading import Event
+import scheduler
+import threading
 from uuid import uuid4
 from time import time
 from functools import wraps
 
 bot_token = os.environ.get('BOTTOKEN')
-bot_token = "794278284:AAGXxdZkUXX9ZMOchm1w4DmfJKeLxTS9ZQg"
-
 
 # Enable logging
 logging.basicConfig(
@@ -109,6 +109,9 @@ def error(update, context):
 
 
 def main():
+    scheduler.setup_schedule()
+    schedule_thread = threading.Thread(target=scheduler.run_schedule)
+    schedule_thread.start()
     updater = Updater(token=bot_token, use_context=True)
     dispatcher = updater.dispatcher
 

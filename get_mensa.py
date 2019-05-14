@@ -2,6 +2,7 @@
 import datetime
 import os
 import urllib.request
+from helpers import with_logging
 
 targetdir = os.environ.get('DATAFOLDER', './data/')
 targetdir += 'mensa/'
@@ -35,6 +36,7 @@ def createFolder(directory):
         print ('Error: Creating directory. ' + directory)
 
 
+# @with_logging
 def getMensa():
     createFolder(targetdir)
     getDate()

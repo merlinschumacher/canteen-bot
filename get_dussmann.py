@@ -3,6 +3,7 @@ import email
 import re
 import os
 import datetime
+from helpers import with_logging
 
 server = os.environ.get('MAILSERVER')
 username = os.environ.get('MAILUSER')
@@ -92,6 +93,7 @@ def downloadNewAttachements(server, user, password, outputdir):
         downloadAttachmentsInEmail(m, emailid, outputdir)
 
 
+# @with_logging
 def getDussmann():
     downloadNewAttachements(server, username, password, targetdir)
 
