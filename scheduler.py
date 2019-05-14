@@ -15,8 +15,8 @@ start_time2 = str().join(start_time_list)
 print("Running Jobs at: " + start_time + " and " + start_time2)
 
 def setup_schedule():
-    mensadir = os.environ.get('MENSAFOLDER', './data/mensa/')
-    dussmanndir = os.environ.get('DUSSMANNFOLDER', './data/dussmann/')
+    mensadir = os.environ.get('MENSAFOLDER', '/data/mensa/')
+    dussmanndir = os.environ.get('DUSSMANNFOLDER', '/data/dussmann/')
     
     schedule.every().day.at(start_time).do(get_mensa.getMensa)
     schedule.every().day.at(start_time).do(get_dussmann.getDussmann)

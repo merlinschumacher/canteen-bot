@@ -8,8 +8,11 @@ from helpers import with_logging
 server = os.environ.get('MAILSERVER')
 username = os.environ.get('MAILUSER')
 password = os.environ.get('MAILPASSWORD')
-targetdir = os.environ.get('DATAFOLDER', './data/')
+targetdir = os.environ.get('DATAFOLDER', '/data/')
 targetdir += "dussmann/"
+
+if not os.path.exists(targetdir):
+    os.makedirs(targetdir)
 
 mark_as_read = True 
 
@@ -95,6 +98,7 @@ def downloadNewAttachements(server, user, password, outputdir):
 
 # @with_logging
 def getDussmann():
+    createFolder(targetdir)
     downloadNewAttachements(server, username, password, targetdir)
 
 

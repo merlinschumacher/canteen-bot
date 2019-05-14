@@ -167,7 +167,7 @@ def saveMenuToFile(targetfolder):
         file.close()
 
 def getCurrentFood():
-    targetfolder = os.environ.get('DATAFOLDER', './data/')
+    targetfolder = os.environ.get('DATAFOLDER', '/data/')
     targetfolder += "dussmann/"
     week = datetime.date.today().isocalendar()[1]
     year = str(datetime.datetime.now().year)
@@ -184,7 +184,7 @@ def getCurrentFood():
     return file.read() 
 
 if __name__ == "__main__":
-    targetfolder = "./data/dussmann/"
+    targetfolder = "/data/dussmann/"
     saveMenuToFile(targetfolder)
     m = menu(datetime.datetime.today().weekday())
     if m:

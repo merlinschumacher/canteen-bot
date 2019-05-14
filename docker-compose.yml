@@ -4,7 +4,7 @@ services:
   bot:
     image: merlinschumacher/canteen-bot:latest
     volumes:
-      - botdata:/bot
+      - botdata:/data
     env_file: .env
     environment:
       - BOTTOKEN:$BOTTOKEN

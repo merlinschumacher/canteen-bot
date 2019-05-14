@@ -4,7 +4,7 @@ import os
 import urllib.request
 from helpers import with_logging
 
-targetdir = os.environ.get('DATAFOLDER', './data/')
+targetdir = os.environ.get('DATAFOLDER', '/data/')
 targetdir += 'mensa/'
 
 week = datetime.date.today().isocalendar()[1]
