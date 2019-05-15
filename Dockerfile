@@ -5,5 +5,5 @@ ENV LC_ALL=C.UTF-8
 WORKDIR /bot
 COPY requirements.txt /bot/
 COPY *.py /bot/
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
 CMD ["python3", "-u", "canteen-bot.py"]
