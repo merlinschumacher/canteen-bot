@@ -30,8 +30,7 @@ def run_schedule():
     schedule.run_all()
     while True:
         schedule.run_pending()
-        print("Ran scheduler")
-        time.sleep(1)
+        time.sleep(10)
 
 if __name__ == "__main__":
     setup_schedule()
