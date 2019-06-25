@@ -7,7 +7,7 @@ import get_mensa
 import ocr_dussmann
 import ocr_mensa
 
-start_time = "09:30"
+start_time = "07:30"
 start_time_list = list(start_time)
 start_time_list[4] = "2"
 start_time2 = str().join(start_time_list)
