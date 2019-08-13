@@ -71,8 +71,6 @@ Ich sag dir was es in der Dussmann-Kantine und der MHH-Mensa gibt.
 Bedenke: Die Heise-Kantine ist nicht öffentlich und nur für Mitarbeiter.\n
 Hier eine Liste der möglichen Kommandos:
 /essen – Manuelle Abfrage
-/uhrzeit HH:MM – Automatische Benachrichtigung festlegen
-/ruhe – Automatische Benachrichtigung abschalten
 Probleme und Störungen kannst du gern an mls@ct.de melden!"""
     
     update.message.reply_text(helptext)
