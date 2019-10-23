@@ -1,21 +1,23 @@
 on: push
-name: New workflow
+name: New build on push
 jobs:
-  dockerRegistry:
-    name: Docker Registry
+  package_registry:
+    name: GitHub Package Registry
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: Docker Registry
-      uses: actions/docker/login@8cdf801b322af5f369e00d85e9cf3a7122f49108
+      name: Checkout Repo
+    - uses: actions/docker/login@master
+      name: Log in to registry
       env:
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-    - name: GitHub Action for Docker
-      uses: actions/docker/cli@8cdf801b322af5f369e00d85e9cf3a7122f49108
+          DOCKER_REGISTRY_URL: docker.pkg.github.com
+          DOCKER_USERNAME: ${{ secrets.GITHUB_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build docker image
+      uses: actions/docker/cli@master
       with:
-        args: build -t merlinschumacher/canteen-bot:latest .
-    - name: GitHub Action for Docker-1
-      uses: actions/docker/cli@8cdf801b322af5f369e00d85e9cf3a7122f49108
+        args: build -t docker.pkg.github.com/merlinschumacher/canteen-bot/canteen-bot:lastest .
+    - name: Push image to registy
+      uses: actions/docker/cli@master
       with:
-        args: push merlinschumacher/canteen-bot:latest
+        args: push docker.pkg.github.com/merlinschumacher/canteen-bot/canteen-bot:lastest
