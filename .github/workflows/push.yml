@@ -7,17 +7,13 @@ jobs:
     steps:
     - uses: actions/checkout@master
       name: Checkout Repo
-    - uses: actions/docker/login@master
-      name: Log in to registry
+    - name: Log in to registry
       env:
           DOCKER_REGISTRY_URL: docker.pkg.github.com
           DOCKER_USERNAME: ${{ secrets.GITHUB_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY_URL
     - name: Build docker image
-      uses: actions/docker/cli@master
-      with:
-        args: build -t docker.pkg.github.com/merlinschumacher/canteen-bot/canteen-bot:lastest .
+      run: docker build -t docker.pkg.github.com/merlinschumacher/canteen-bot/canteen-bot:lastest .
     - name: Push image to registy
-      uses: actions/docker/cli@master
-      with:
-        args: push docker.pkg.github.com/merlinschumacher/canteen-bot/canteen-bot:lastest
+      run: docker push docker.pkg.github.com/merlinschumacher/canteen-bot/canteen-bot:lastest
