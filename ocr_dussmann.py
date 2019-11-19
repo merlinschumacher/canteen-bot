@@ -9,8 +9,9 @@ import datetime
 from pdf2image import convert_from_path
 import numpy
 import time
-import os 
+import os
 from helpers import with_logging
+from PIL import Image, ImageChops
 
 price_re = re.compile("(\d+,\d+\s*€)")
 linebreak_re = re.compile("\n+")
@@ -22,23 +23,23 @@ special_re = re.compile("(highlight der woche|fit men[üu])", re.IGNORECASE)
 
 # Konstanten
 
-soup_x = 0.152
-soup_y = 0.234
+soup_x = 0.112
+soup_y = 0.214
 soup_h = 0.031
-soup_w = 0.790
+soup_w = 0.830
 
 main1_x = soup_x
-main1_y = 0.268
-main1_h = 0.163
+main1_y = 0.290
+main1_h = 0.173
 main1_w = soup_w
 
 main2_x = soup_x
-main2_y = 0.433
+main2_y = 0.463
 main2_h = main1_h
 main2_w = soup_w
 
 veg_x = soup_x
-veg_y = 0.597
+veg_y = 0.637
 veg_h = main1_h
 veg_w = soup_w
 
@@ -56,6 +57,13 @@ class Food:
         self.name = name
         self.price = price
         self.special = special
+
+    def pre(self):
+        nl = "\n"
+        return f"""{self.name}
+        {self.price} 
+        {self.special}
+        """
 
 
 class Menu:
@@ -93,13 +101,11 @@ def menu(day):
         return None
 
     global pdf
-    image = convert_from_path(pdf)[0].convert('P', dither=None)
-
+    image = convert_from_path(pdf, thread_count=4, grayscale=False, single_file=True)[0]
     soup = parse(crop(image, (soup_x, soup_y, soup_w, soup_h)), "soup")
     main1 = parse(crop(image, (main1_x, main1_y, main1_w, main1_h)))
     main2 = parse(crop(image, (main2_x, main2_y, main2_w, main2_h)))
     veg = parse(crop(image, (veg_x, veg_y, veg_w, veg_h)))
-
     return Menu(soup[day], main1[day], main2[day], veg[day])
 
 
@@ -107,7 +113,7 @@ def fifths(image):
     fifths = []
     for i in range(0, 5):
         #                    x      y  w    h
-        fifth = crop(image, (i*0.2, 0, 0.2, 1))
+        fifth = crop(image, (i * 0.2, 0, 0.2, 1))
         fifths.append(fifth)
     return fifths
 
@@ -115,7 +121,20 @@ def fifths(image):
 def parse(image, food_type="normal"):
     food = []
     for fifth in fifths(image):
-        x = pytesseract.image_to_string(fifth, lang="deu")
+        food_name = crop(fifth, (0, 0, 0.8, 0.74))
+        food_name.save("f_name.png")
+        food_price = crop(fifth, (0.21, 0.89, 0.3, 0.18))
+        food_price.save("f_price.png")
+
+        food_name_text = pytesseract.image_to_string(food_name, lang="deu")
+        food_name_text = " ".join(food_name_text.split())
+
+        food_price_text = pytesseract.image_to_string(food_price, lang="deu")
+        food_price_data = pytesseract.image_to_data(food_price, lang="deu")
+        print(food_price_data)
+
+        print(food_price_text)
+        x = food_name_text + " " + food_price_text
         current_food = prettify(x, food_type)
         if current_food.price == None and food_type != "normal":
             if food_type == "soup":
@@ -146,11 +165,12 @@ def prettify(line, food_type):
 
 def crop(image, box):
     w, h = image.size
-    x = int(box[0]*w)
-    y = int(box[1]*h)
-    cropped_w = int(box[2]*w)
-    cropped_h = int(box[3]*h)
+    x = int(box[0] * w)
+    y = int(box[1] * h)
+    cropped_w = int(box[2] * w)
+    cropped_h = int(box[3] * h)
     return image.crop((x, y, x + cropped_w, y + cropped_h))
+
 
 @with_logging
 def saveMenuToFile(targetfolder):
@@ -166,8 +186,9 @@ def saveMenuToFile(targetfolder):
         file.write(m.pre())
         file.close()
 
+
 def getCurrentFood():
-    targetfolder = os.environ.get('DATAFOLDER', '/data/')
+    targetfolder = os.environ.get("DATAFOLDER", "/data/")
     targetfolder += "dussmann/"
     week = datetime.date.today().isocalendar()[1]
     year = str(datetime.datetime.now().year)
@@ -181,10 +202,21 @@ def getCurrentFood():
     week = str("%02d" % week)
     filename = targetfolder + year + week + str(dow) + ".txt"
     file = open(filename, "r")
-    return file.read() 
+    return file.read()
+
+
+def trim(im):
+    bg = Image.new(im.mode, im.size, im.getpixel((0, 0)))
+    diff = ImageChops.difference(im, bg)
+    diff = ImageChops.add(diff, diff, 2.0, -100)
+    bbox = diff.getbbox()
+    if bbox:
+        return im.crop(bbox)
+
 
 if __name__ == "__main__":
-    targetfolder = "/data/dussmann/"
+    targetfolder = os.environ.get("DATAFOLDER", "/data/")
+    targetfolder += "dussmann/"
     saveMenuToFile(targetfolder)
     m = menu(datetime.datetime.today().weekday())
     if m:
