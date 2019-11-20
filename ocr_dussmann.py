@@ -7,6 +7,7 @@ import re
 import pytesseract
 import datetime
 from pdf2image import convert_from_path
+import pdftotext
 import numpy
 import time
 import os
@@ -131,9 +132,7 @@ def parse(image, food_type="normal"):
 
         food_price_text = pytesseract.image_to_string(food_price, lang="deu")
         food_price_data = pytesseract.image_to_data(food_price, lang="deu")
-        print(food_price_data)
 
-        print(food_price_text)
         x = food_name_text + " " + food_price_text
         current_food = prettify(x, food_type)
         if current_food.price == None and food_type != "normal":
@@ -178,6 +177,8 @@ def saveMenuToFile(targetfolder):
     year = str(datetime.datetime.now().year)
     global pdf
     pdf = targetfolder + year + week + ".pdf"
+    dictfile = targetfolder + year + week + ".dict"
+    generateDict(pdf, dictfile)
     print("Converting Dussmann to text")
     for dow in range(0, 5):
         filename = targetfolder + year + week + str(dow) + ".txt"
@@ -205,13 +206,20 @@ def getCurrentFood():
     return file.read()
 
 
-def trim(im):
-    bg = Image.new(im.mode, im.size, im.getpixel((0, 0)))
-    diff = ImageChops.difference(im, bg)
-    diff = ImageChops.add(diff, diff, 2.0, -100)
-    bbox = diff.getbbox()
-    if bbox:
-        return im.crop(bbox)
+def generateDict(pdf, dictfile):
+    with open(pdf, "rb") as f:
+        pdf_obj = pdftotext.PDF(f)
+    pdf_text = ""
+    for page in pdf_obj:
+        pdf_text += page
+    pdf_text = "".join(filter(lambda x: x.isalpha() | x.isspace(), pdf_text))
+    pdf_text = " ".join(pdf_text.split())
+    words = pdf_text.split()
+    pdf_text = " ".join(sorted(set(words), key=words.index))
+    pdf_text = pdf_text.replace(" ", "\n")
+    file = open(dictfile, "w")
+    file.write(pdf_text)
+    file.close()
 
 
 if __name__ == "__main__":
@@ -221,3 +229,4 @@ if __name__ == "__main__":
     m = menu(datetime.datetime.today().weekday())
     if m:
         print(m.pre())
+
