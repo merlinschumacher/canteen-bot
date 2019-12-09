@@ -44,9 +44,9 @@ def getMensa():
     global week 
     filepath = targetdir + str(year)+str('%02d' % week)+'.pdf'
     if next_week:
-        pdf = "https://www.mh-hannover.de/fileadmin/organisation/logistik_gbIV/zentralkueche/downloads/speisepl_nwo.pdf"
+        pdf = "https://www.mhh.de/fileadmin/mhh/zentralkueche/downloads/speisepl_nwo.pdf"
     else:
-        pdf = "https://www.mh-hannover.de/fileadmin/organisation/logistik_gbIV/zentralkueche/downloads/speisepl_akt.pdf"
+        pdf = "https://www.mhh.de/fileadmin/mhh/zentralkueche/downloads/speisepl_akt.pdf"
     urllib.request.urlretrieve(pdf, filepath)
 
 
