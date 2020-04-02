@@ -13,7 +13,7 @@ pandas==0.25.3
 pathspec==0.6.0
 pdf2image==1.10.0
 pdftotext==2.1.2
-Pillow==6.2.1
+Pillow==6.2.2
 pycparser==2.19
 pytesseract==0.3.0
 python-dateutil==2.8.1
