@@ -8,7 +8,7 @@ Click==7.0
 cryptography==3.3.2
 distro==1.4.0
 future==0.18.2
-numpy==1.17.4
+numpy==1.22.0
 pandas==0.25.3
 pathspec==0.6.0
 pdf2image==1.10.0
